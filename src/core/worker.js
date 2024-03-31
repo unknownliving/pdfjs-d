@@ -194,6 +194,7 @@ class WorkerMessageHandler {
       data,
       password,
       disableAutoFetch,
+      decryptKey,
       rangeChunkSize,
       length,
       docBaseUrl,
@@ -203,6 +204,7 @@ class WorkerMessageHandler {
       const pdfManagerArgs = {
         source: null,
         disableAutoFetch,
+        decryptKey,
         docBaseUrl,
         docId,
         enableXfa,

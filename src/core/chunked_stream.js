@@ -15,6 +15,7 @@
 
 import { arrayBuffersToBytes, MissingDataException } from "./core_utils.js";
 import { assert, PromiseCapability } from "../shared/util.js";
+import { decrypt } from "../shared/crypto_utils.js";
 import { Stream } from "./stream.js";
 
 class ChunkedStream extends Stream {
@@ -263,6 +264,7 @@ class ChunkedStreamManager {
     this.stream = new ChunkedStream(this.length, this.chunkSize, this);
     this.pdfNetworkStream = pdfNetworkStream;
     this.disableAutoFetch = args.disableAutoFetch;
+    this.decryptKey = args.decryptKey;
     this.msgHandler = args.msgHandler;
 
     this.currRequestId = 0;
@@ -290,7 +292,12 @@ class ChunkedStreamManager {
           if (done) {
             const chunkData = arrayBuffersToBytes(chunks);
             chunks = null;
-            resolve(chunkData);
+            if (this.decryptKey.length === 0) {
+              resolve(chunkData);
+              return;
+            }
+            const decode = decrypt(chunkData, this.decryptKey, { output: 'array', padding: 'none' });
+            resolve(new Uint8Array(decode));
             return;
           }
           if (typeof PDFJSDev === "undefined" || PDFJSDev.test("TESTING")) {

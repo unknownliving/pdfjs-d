@@ -296,6 +296,7 @@ function getDocument(src) {
   const disableRange = src.disableRange === true;
   const disableStream = src.disableStream === true;
   const disableAutoFetch = src.disableAutoFetch === true;
+  const decryptKey = src.decryptKey;
   const pdfBug = src.pdfBug === true;
 
   // Parameters whose default values depend on other parameters.
@@ -366,6 +367,7 @@ function getDocument(src) {
     data,
     password,
     disableAutoFetch,
+    decryptKey,
     rangeChunkSize,
     length,
     docBaseUrl,

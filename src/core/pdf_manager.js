@@ -165,6 +165,7 @@ class NetworkPdfManager extends BasePdfManager {
       msgHandler: args.handler,
       length: args.length,
       disableAutoFetch: args.disableAutoFetch,
+      decryptKey: args.decryptKey,
       rangeChunkSize: args.rangeChunkSize,
     });
     this.pdfDocument = new PDFDocument(this, this.streamManager.getStream());

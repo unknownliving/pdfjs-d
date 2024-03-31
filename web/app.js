@@ -605,10 +605,12 @@ const PDFViewerApplication = {
 
     const { appConfig, eventBus } = this;
     let file;
+    let decryptKey;
     if (typeof PDFJSDev === "undefined" || PDFJSDev.test("GENERIC")) {
       const queryString = document.location.search.substring(1);
       const params = parseQueryString(queryString);
       file = params.get("file") ?? AppOptions.get("defaultUrl");
+      decryptKey = params.get("key");
       validateFileURL(file);
     } else if (PDFJSDev.test("MOZCENTRAL")) {
       file = window.location.href;
@@ -679,6 +681,12 @@ const PDFViewerApplication = {
     }
 
     if (typeof PDFJSDev === "undefined" || PDFJSDev.test("GENERIC")) {
+      // modify params before open file
+      if (typeof decryptKey !== "undefined") {
+        AppOptions.set("disableAutoFetch", true);
+        AppOptions.set("disableStream", true);
+        AppOptions.set("decryptKey", decryptKey);
+      }
       if (file) {
         this.open({ url: file });
       } else {
@@ -2208,9 +2216,9 @@ if (typeof PDFJSDev === "undefined" || PDFJSDev.test("GENERIC")) {
       // Removing of the following line will not guarantee that the viewer will
       // start accepting URLs from foreign origin -- CORS headers on the remote
       // server must be properly configured.
-      if (fileOrigin !== viewerOrigin) {
-        throw new Error("file origin does not match viewer's");
-      }
+      // if (fileOrigin !== viewerOrigin) {
+      //   throw new Error("file origin does not match viewer's");
+      // }
     } catch (ex) {
       PDFViewerApplication._documentError("pdfjs-loading-error", {
         message: ex.message,

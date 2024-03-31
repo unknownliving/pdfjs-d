@@ -304,6 +304,11 @@ const defaultOptions = {
     value: false,
     kind: OptionKind.API + OptionKind.PREFERENCE,
   },
+  decryptKey: {
+    /** @type {String} */
+    value: "",
+    kind: OptionKind.API,
+  },
   docBaseUrl: {
     /** @type {string} */
     value: "",
